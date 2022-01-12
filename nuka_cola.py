@@ -11,24 +11,22 @@ def detectAndDisplay(frame):
     #-- Detect faces
     faces = face_cascade.detectMultiScale(frame_gray, minNeighbors = 25, scaleFactor = 1.2)
     for (x,y,w,h) in faces:
-        crop_frame = frame[y:y+h, x:x+w]
+        crop_frame = frame_gray[y:y+h, x:x+w]
         median = numpy.median(crop_frame)
-        if median > 135 : 
+        if median < 25 : 
             cv.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
             # process the detections
             #print(str(x) +" " + str(y) + " " +str(w) + " " +str(h))
             cv.putText(crop_frame,"{:f}".format(median), (10, 30), cv.FONT_HERSHEY_DUPLEX, 1, color_info, 1, cv.LINE_AA)
 
-            #cv.imshow("cropped", crop_frame)
+            cv.imshow("cropped", crop_frame)
 
 
-            #cv.waitKey(1500)
-        
-        
-    cv.imshow('Capture - Cola detection', frame)
+            cv.waitKey(1500)    
+    #cv.imshow('Capture - Cola detection', frame)
 
 parser = argparse.ArgumentParser(description='Code for Cascade Classifier tutorial.')
-parser.add_argument('--face_cascade', help='Path to face cascade.', default='./XML_models/cascade.xml')
+parser.add_argument('--face_cascade', help='Path to face cascade.', default='./XML_models/cascade_stage18.xml')
 parser.add_argument('--camera', help='Camera divide number.', type=int, default=0)
 args = parser.parse_args()
 
